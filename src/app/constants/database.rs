@@ -1,0 +1,1 @@
+pub const AUTH_DB: &str = "AUTH_DB";
