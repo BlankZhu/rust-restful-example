@@ -42,23 +42,6 @@ impl APIAuthAPP {
             },
         }
 
-        // set worker thread number
-        let worker_num: usize;
-        match self.config.threads {
-            Some(n) if n > 0 => {
-                worker_num = n;
-                self.config.threads = Some(n);
-            },
-            Some(_) => {
-                worker_num = 1;
-                self.config.threads = Some(1);
-            },
-            None => {
-                worker_num = 1;
-                self.config.threads = Some(1);
-            },
-        }
-
         // setup mongodb connection
         let mg_cli_opt: ClientOptions;
         let mg_cli_opt_res = ClientOptions::parse(self.config.mongo_uri.as_str()).await;
@@ -92,7 +75,6 @@ impl APIAuthAPP {
                 .app_data(mg_cli.clone())
                 .service(web::scope("/api/v1").configure(api_auth_config))
         })
-        .workers(worker_num)
         .bind(bind_addr)?
         .run()
         .await

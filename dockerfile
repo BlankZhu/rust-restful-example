@@ -1,13 +1,13 @@
-FROM rust:1.52 as builder
-WORKDIR /usr/src/api-auth
+FROM rust:1.54 as builder
+WORKDIR /usr/src/rust-restful-example
 COPY . .
 COPY ./res/config.toml /usr/local/cargo
 RUN cargo build --release
 
 FROM debian:buster-slim
-COPY --from=builder /usr/src/api-auth/target/release/api-auth /usr/local/bin/api-auth
-COPY --from=builder /usr/src/api-auth/res/config.yaml /usr/local/conf/config.yaml
-ENTRYPOINT ["api-auth", "-c", "/usr/local/conf/config.yaml"]
+COPY --from=builder /usr/src/rust-restful-example/target/release/rust-restful-example /usr/local/bin/rust-restful-example
+COPY --from=builder /usr/src/rust-restful-example/res/config.yaml /usr/local/conf/config.yaml
+ENTRYPOINT ["rust-restful-example", "-c", "/usr/local/conf/config.yaml"]
 
-# docker build -t api-auth:0.1 --network host .
-# docker run -d --name api-auth --network dev-mongo -p 8084:8084 api-auth:0.1
+# docker build -t rust-restful-example:0.1 --network host .
+# docker run -d --name rust-restful-example --network dev-mongo -p 8084:8084 rust-restful-example:0.1

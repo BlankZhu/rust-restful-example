@@ -6,7 +6,6 @@ pub struct AppConfig {
     pub log_level: Option<String>,
     pub mongo_uri: String,
     pub port: Option<u16>,
-    pub threads: Option<usize>,
 }
 
 impl AppConfig {
