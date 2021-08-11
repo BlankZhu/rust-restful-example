@@ -1,4 +1,4 @@
-use crate::app::{constants, entity::api_auth_info::APIAuthInfo};
+use crate::app::{constants, module::api_auth::entity::APIAuthInfo};
 use actix_web::web;
 use chrono::{DateTime, Utc};
 use futures::StreamExt;
@@ -51,21 +51,6 @@ impl APIAuthDAO {
             doc.insert("UID", uid);
         }
 
-        // let cursor = coll.find(doc, find_opts).await;
-        // match cursor {
-        //     Ok(mut cur) => {
-        //         let mut ret: Vec<APIAuthInfo> = Vec::new();
-        //         while let Some(info) = cur.next().await {
-        //             match info {
-        //                 Ok(info) => ret.push(info),
-        //                 Err(err) => return Err(err),
-        //             }
-        //         }
-        //         return Ok(ret);
-        //     }
-        //     Err(err) => return Err(err),
-        // }
-
         let mut cur = coll.find(doc, find_opts).await?;
         let mut ret: Vec<APIAuthInfo> = Vec::new();
         while let Some(info) = cur.next().await {
@@ -90,17 +75,7 @@ impl APIAuthDAO {
             "SK": entity.sk.as_ref().unwrap(),
             "UID": entity.uid.as_ref().unwrap(),
         };
-
-        // let res = coll.insert_one(doc, None).await;
-        // match res {
-        //     Ok(res) => {
-        //         let id = res.inserted_id;
-        //         let mut ret = entity.clone();
-        //         ret.id = id.as_object_id();
-        //         return Ok(ret);
-        //     }
-        //     Err(err) => return Err(err),
-        // }
+        
         coll.insert_one(doc, None).await.and_then(|res| {
             let id = res.inserted_id;
             let mut ret = entity.clone();
@@ -139,20 +114,7 @@ impl APIAuthDAO {
         if let Some(uid) = &entity.uid {
             update.insert("UID", &uid);
         }
-
-        // let res = coll
-        //     .update_one(
-        //         query,
-        //         doc! {
-        //             "$set": update,
-        //         },
-        //         None,
-        //     )
-        //     .await;
-        // match res {
-        //     Ok(_) => return Ok(ret),
-        //     Err(err) => return Err(err),
-        // }
+        
         coll.update_one(
             query,
             doc! {
@@ -167,12 +129,7 @@ impl APIAuthDAO {
     pub async fn delete_one(&self, id: &ObjectId) -> Result<(), Error> {
         let db = self.client.database(constants::database::AUTH_DB);
         let coll = db.collection::<APIAuthInfo>(constants::collection::COLL_API_AUTH);
-
-        // let res = coll.delete_one(doc! { "_id": id }, None).await;
-        // match res {
-        //     Ok(_) => return Ok(()),
-        //     Err(err) => return Err(err),
-        // }
+        
         coll.delete_one(
             doc! {
                 "_id" : id
