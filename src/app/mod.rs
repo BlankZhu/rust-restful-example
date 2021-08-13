@@ -1,4 +1,4 @@
-use crate::app::controller::api_auth::api_auth_config;
+use crate::app::module::api_auth::controller::api_auth_config;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use env_logger::Env;
 use log::debug;
@@ -7,10 +7,7 @@ use mongodb::{options::ClientOptions, Client};
 pub mod cli;
 pub mod config;
 pub mod constants;
-pub mod controller;
-mod dao;
-pub mod entity;
-mod service;
+pub mod module;
 
 pub struct APIAuthAPP {
     pub config: config::AppConfig,
