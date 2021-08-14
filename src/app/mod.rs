@@ -1,4 +1,4 @@
-use crate::app::controller::api_auth::api_auth_config;
+use crate::app::module::api_auth::controller::api_auth_config;
 use actix_web::{middleware::Logger, web, App, HttpServer};
 use env_logger::Env;
 use log::debug;
@@ -7,10 +7,7 @@ use mongodb::{options::ClientOptions, Client};
 pub mod cli;
 pub mod config;
 pub mod constants;
-pub mod controller;
-mod dao;
-pub mod entity;
-mod service;
+pub mod module;
 
 pub struct APIAuthAPP {
     pub config: config::AppConfig,
@@ -39,23 +36,6 @@ impl APIAuthAPP {
             None => {
                 bind_addr = String::from("0.0.0.0:8084");
                 self.config.port = Some(8084);
-            },
-        }
-
-        // set worker thread number
-        let worker_num: usize;
-        match self.config.threads {
-            Some(n) if n > 0 => {
-                worker_num = n;
-                self.config.threads = Some(n);
-            },
-            Some(_) => {
-                worker_num = 1;
-                self.config.threads = Some(1);
-            },
-            None => {
-                worker_num = 1;
-                self.config.threads = Some(1);
             },
         }
 
@@ -92,7 +72,6 @@ impl APIAuthAPP {
                 .app_data(mg_cli.clone())
                 .service(web::scope("/api/v1").configure(api_auth_config))
         })
-        .workers(worker_num)
         .bind(bind_addr)?
         .run()
         .await

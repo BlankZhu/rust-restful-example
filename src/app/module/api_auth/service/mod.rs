@@ -1,4 +1,4 @@
-use crate::app::{dao::api_auth::APIAuthDAO, entity::api_auth_info::APIAuthInfo};
+use crate::app::module::api_auth::{dao::APIAuthDAO, entity::APIAuthInfo};
 use actix_web::{web, HttpResponse};
 use mongodb::Client;
 use rand::{distributions::Alphanumeric, thread_rng, Rng};

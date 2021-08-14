@@ -1,4 +1,4 @@
-use crate::app::{entity::api_auth_info::APIAuthInfo, service::api_auth::APIAuthService};
+use crate::app::module::api_auth::{entity::APIAuthInfo, service::APIAuthService};
 use actix_web::{web, HttpResponse};
 use mongodb::Client;
 
