@@ -226,25 +226,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-restful-example"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "chrono",
- "clap",
- "env_logger",
- "futures",
- "log",
- "mongodb",
- "rand 0.8.3",
- "serde",
- "serde_json",
- "serde_yaml",
- "tokio",
- "uuid",
-]
-
-[[package]]
 name = "async-trait"
 version = "0.1.50"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1524,6 +1505,25 @@ dependencies = [
  "untrusted",
  "web-sys",
  "winapi",
+]
+
+[[package]]
+name = "rust-restful-example"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "chrono",
+ "clap",
+ "env_logger",
+ "futures",
+ "log",
+ "mongodb",
+ "rand 0.8.3",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]
