@@ -54,7 +54,7 @@ port: 8084  # where the actix will be running on
 
 Here we will talk about the code structure used by this easy example project.
 
-Since this project has a only one functional module `api-auth`, the code files are organized in a flat style like below:
+If your application has only a few functional modules, you may use the flat code structure style like below:
 
 ```
 src
@@ -75,12 +75,12 @@ src
   └─app
       ├─cli
       ├─config
+      ├─constants   # or, put this in a module's dir
       └─module
           |-moduleA
           |-moduleB
           |-...
           └─moduleN
-              ├─constants
               ├─controller
               ├─dao
               ├─entity
@@ -91,7 +91,7 @@ Anyway, take the one that fits you (and your team) best. You can also use the st
 
 ### Controller
 
-The `Controller` is described in `src/app/controller`.
+The `Controller` is described in `src/app/module/[ModuleName]/controller`.
 
 [actix-web](https://github.com/actix/actix-web) helps to build up the project's API router. In the api-auth controller, `api_auth_config` helps to setup the actix's service config, and the so are the restful APIs described in it like below:
 
@@ -108,13 +108,13 @@ pub fn api_auth_config(cfg: &mut web::ServiceConfig) {
 ```
 This controller use functions defined in the same source code file to call the `Service` level code.
 
-For more details, check the code in `src/app/controller/api_auth.rs`.
+For more details, check the code in `src/app/module/api_auth/controller/mod.rs`.
 
-If you want to add your own controller, just add a *.rs code file to `src/app/controller`.
+If you want to add your own controller, just add a *.rs code file to `src/app/module/[ModuleName]/controller`.
 
 ### Service
 
-After the api-auth controller, it's time to describe the bussiness related code in `src/app/service`.
+After the api-auth controller, it's time to describe the bussiness related code in `src/app/module/[ModuleName]/service`.
 
 In the api-auth's `Service` level, a struct `APIAuthService` is defined. The `APIAuthService` is a struct with empty data members but also a collection of bussiness related functions. Here the DTO passed in by upper controller is examinted, converted, or extracted for the next following database related operations.
 
@@ -142,9 +142,9 @@ impl APIAuthService {
 }
 ```
 
-For more details, check the code in `src/app/service/api_auth.rs`.
+For more details, check the code in `src/app/module/api_auth/service/mod.rs`.
 
-If you want to add your own service, just add a *.rs code file to `src/app/service`.
+If you want to add your own service, just add a *.rs code file to `src/app/module/[ModuleName]/service`.
 
 ### DAO
 
@@ -179,9 +179,9 @@ impl APIAuthDAO {
 }
 ```
 
-For more details, check the code in `src/app/dao/api_auth.rs`. Some of the codes in it are commented in it to helps the newcomers of Rust to understand the syntax sugar.
+For more details, check the code in `src/app/module/api_auth/dao/mod.rs`. Some of the codes in it are commented in it to helps the newcomers of Rust to understand the syntax sugar.
 
-If you want to add your own dao, just add a *.rs code file to `src/app/dao`.
+If you want to add your own dao, just add a *.rs code file to `src/app/module/[ModuleName]/dao`.
 
 ### Entity
 
@@ -211,9 +211,9 @@ pub struct APIAuthInfo {
 
 By adding the macros provided by `serde`, we can easily control the behaviours in serializing/deserializing.
 
-For more details, check the code in `src/app/entity/api_auth_info.rs`. 
+For more details, check the code in `src/app/module/api_auth/entity/mod.rs`. 
 
-If you want to add your own entity, just add a *.rs code file to `src/app/entity`.
+If you want to add your own entity, just add a *.rs code file to `src/app/module/[ModuleName]/entity`.
 
 ## Dockerfike
 
