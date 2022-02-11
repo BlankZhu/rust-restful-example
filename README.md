@@ -52,14 +52,14 @@ port: 8084  # where the actix will be running on
 
 ## Code Structure Detail
 
-Here we will talk about the code structure used by this easy example project.
+In this section, we will talk about the code structure used by this easy example project.
 
 If your application has only a few functional modules, you may use the flat code structure style like below:
 
 ```
 src
   └─app
-      ├─cli
+      ├─cli # command line related codes
       ├─config
       ├─constants
       ├─controller
@@ -75,25 +75,26 @@ src
   └─app
       ├─cli
       ├─config
-      ├─constants   # or, put this in a module's dir
+      ├─constants   # global constants
       └─module
           |-moduleA
           |-moduleB
           |-...
           └─moduleN
+              ├─constants   # module related constants
               ├─controller
               ├─dao
               ├─entity
               └─service
 ```
 
-Anyway, take the one that fits you (and your team) best. You can also use the style in any other MVC project.
+Anyway, take the one that fits you and your team best. You can also use the style from any other MVC-like project.
 
 ### Controller
 
 The `Controller` is described in `src/app/module/[ModuleName]/controller`.
 
-[actix-web](https://github.com/actix/actix-web) helps to build up the project's API router. In the api-auth controller, `api_auth_config` helps to setup the actix's service config, and the so are the restful APIs described in it like below:
+[actix-web](https://github.com/actix/actix-web) helps to build up the project's API router. In the api-auth controller, `api_auth_config` helps to setup the actix's service config, and the  restful APIs are described in it like below:
 
 ```rust
 pub fn api_auth_config(cfg: &mut web::ServiceConfig) {
@@ -106,15 +107,15 @@ pub fn api_auth_config(cfg: &mut web::ServiceConfig) {
     );
 }
 ```
-This controller use functions defined in the same source code file to call the `Service` level code.
+This controller use functions defined in the same source code file to call the `Service` level codes.
 
-For more details, check the code in `src/app/module/api_auth/controller/mod.rs`.
+For more details, see the codes in [`src/app/module/api_auth/controller/mod.rs`](src/app/module/api_auth/controller/mod.rs).
 
 If you want to add your own controller, just add a *.rs code file to `src/app/module/[ModuleName]/controller`.
 
 ### Service
 
-After the api-auth controller, it's time to describe the bussiness related code in `src/app/module/[ModuleName]/service`.
+After the api-auth controller, it's time to describe the bussiness related codes in `src/app/module/[ModuleName]/service`.
 
 In the api-auth's `Service` level, a struct `APIAuthService` is defined. The `APIAuthService` is a struct with empty data members but also a collection of bussiness related functions. Here the DTO passed in by upper controller is examinted, converted, or extracted for the next following database related operations.
 
@@ -142,13 +143,13 @@ impl APIAuthService {
 }
 ```
 
-For more details, check the code in `src/app/module/api_auth/service/mod.rs`.
+For more details, see the codes in [`src/app/module/api_auth/service/mod.rs`](src/app/module/api_auth/service/mod.rs).
 
 If you want to add your own service, just add a *.rs code file to `src/app/module/[ModuleName]/service`.
 
 ### DAO
 
-The `DAO` describes the operations to the data source. You may have already noticed that there this project doesn't used any ORM framwork like MyBatis or JAP in Java. This project directly operated the database client because the data backend we used here is MongoDB, a nosql database. And, thanks to `actix-web`, the only one mongo client can be initialized in the very beginning of the application and passed to anywhere of our code by using `actix_web::web::Data<T>`. To see how to share the a object through all the actix's handle steps, see the `State` section [here](https://actix.rs/docs/application).
+The `DAO` describes the operations to the data source. You may have already noticed that there this project doesn't used any ORM framwork like MyBatis or JAP in Java. This project directly operated the database client because the data backend we used here is MongoDB, a nosql database. And, thanks to `actix-web`, the only one mongo client can be initialized in the very beginning of the application and passed to anywhere in our code by using `actix_web::web::Data<T>`. To see how to share a object through all the actix's handle steps, see the `State` section [here](https://actix.rs/docs/application).
 
 The api-auth related dao is defined like below:
 
@@ -179,7 +180,7 @@ impl APIAuthDAO {
 }
 ```
 
-For more details, check the code in `src/app/module/api_auth/dao/mod.rs`. Some of the codes in it are commented in it to helps the newcomers of Rust to understand the syntax sugar.
+For more details, see the codes in [`src/app/module/api_auth/dao/mod.rs`](src/app/module/api_auth/dao/mod.rs). Some of the codes in it are commented in it to helps the newcomers of Rust to understand the syntax sugar.
 
 If you want to add your own dao, just add a *.rs code file to `src/app/module/[ModuleName]/dao`.
 
@@ -211,7 +212,7 @@ pub struct APIAuthInfo {
 
 By adding the macros provided by `serde`, we can easily control the behaviours in serializing/deserializing.
 
-For more details, check the code in `src/app/module/api_auth/entity/mod.rs`. 
+For more details, see the codes in [`src/app/module/api_auth/entity/mod.rs`](src/app/module/api_auth/entity/mod.rs). 
 
 If you want to add your own entity, just add a *.rs code file to `src/app/module/[ModuleName]/entity`.
 
